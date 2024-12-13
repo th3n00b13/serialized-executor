@@ -11,8 +11,6 @@ export class TimeoutError extends Error {}
 
 type AsyncFn<T = unknown> = () => T | Promise<T>;
 
-type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
-
 type QueueItem<T, E> = {
   fn: AsyncFn<T>;
   resolve: (result: T) => void;
