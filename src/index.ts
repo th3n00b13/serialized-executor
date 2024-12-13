@@ -63,7 +63,7 @@ export class SerializedExecutor {
     this.#isRunning = true;
     do {
       const item = this.queue.shift();
-      if (!item) break;
+      if (!item) continue;
       const { fn, resolve, reject } = item;
 
       // (I think this is not that performant through, but it shouldn't be that much)
