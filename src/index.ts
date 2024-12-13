@@ -9,7 +9,11 @@ type SerializedExecutorOptions = {
 
 export class TimeoutError extends Error {}
 
-type AsyncFn<T = unknown> = () => T | Promise<T>;
+type ExecutionStatus = {
+  /** Check the function has been marked as timed out or not */
+  timedOut: () => boolean;
+};
+type AsyncFn<T = unknown> = (status: ExecutionStatus) => T | Promise<T>;
 
 type QueueItem<T, E> = {
   fn: AsyncFn<T>;
@@ -64,13 +68,20 @@ export class SerializedExecutor {
       if (!item) continue;
       const { fn, resolve, reject } = item;
 
+      let timedOut = false;
+
       // (I think this is not that performant through, but it shouldn't be that much)
       const n = Promise.race(
         [
-          fn(),
+          fn({
+            timedOut: () => {
+              return timedOut;
+            },
+          }),
           this.options.timeout
             ? new Promise((_, reject) => {
                 setTimeout(() => {
+                  timedOut = true;
                   reject(new TimeoutError("Timeout"));
                 }, this.options.timeout || 0);
               })
