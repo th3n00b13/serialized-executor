@@ -79,14 +79,7 @@ export class SerializedExecutor {
             : undefined,
         ].filter((x) => x !== undefined)
       );
-      const p: Result<unknown, unknown> = await n
-        .then((x) => ({ ok: true as const, value: x }))
-        .catch((x) => ({ ok: false as const, error: x }));
-      if (p.ok) {
-        resolve(p.value);
-      } else {
-        reject(p.error);
-      }
+      await n.then(resolve).catch(reject);
     } while (this.queue.length > 0);
     this.#isRunning = false;
   }
