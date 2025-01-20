@@ -71,7 +71,7 @@ export class SerializedExecutor {
       let timedOut = false;
 
       // (I think this is not that performant through, but it shouldn't be that much)
-      const n = Promise.race(
+      await Promise.race(
         [
           fn({
             timedOut: () => {
@@ -87,8 +87,9 @@ export class SerializedExecutor {
               })
             : undefined,
         ].filter((x) => x !== undefined)
-      );
-      await n.then(resolve).catch(reject);
+      )
+        .then(resolve)
+        .catch(reject);
     } while (this.queue.length > 0);
     this.#isRunning = false;
   }
