@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { sleep } from "bun";
-import { SerializedExecutor, TimeoutError } from "../src";
+import { SerializedExecutor, TimeoutError } from ".";
 
 describe("Basic test", async () => {
   test("Should return a value, async", async () => {
