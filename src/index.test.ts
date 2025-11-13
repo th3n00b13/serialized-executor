@@ -116,7 +116,7 @@ describe("Complex test", async () => {
       }
       flag = true;
     };
-    const result1 = executor.execute(fn);
+    const _result1 = executor.execute(fn);
     const result2 = executor.execute(fn);
     // It seems this is invalid(it throws ACTUAL error), result1 will return undefined for this time
     // expect(result1).resolves.toBeUndefined();
